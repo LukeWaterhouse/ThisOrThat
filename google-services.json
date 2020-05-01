@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "360057969872",
+    "firebase_url": "https://howwelldoyouknow-b299d.firebaseio.com",
+    "project_id": "howwelldoyouknow-b299d",
+    "storage_bucket": "howwelldoyouknow-b299d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:360057969872:android:a8e76c9e81b91e351f92d5",
+        "android_client_info": {
+          "package_name": "com.example.howwelldoyouknow"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "360057969872-pu083bpu6tpbtqjdaq11pdkuiu4tm7d7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.howwelldoyouknow",
+            "certificate_hash": "db6412161ec89c0afe77ae2f65f241f032026cfe"
+          }
+        },
+        {
+          "client_id": "360057969872-59a0otmsk93i7av4fijafh9curfk5s7j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjiYcTM6CrK31KqhHkGK1bKZp_97AD7ro"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "360057969872-59a0otmsk93i7av4fijafh9curfk5s7j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

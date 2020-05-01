@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Think you Know?</string>
+    <string-array name="Categories">
+        <item>Animals</item>
+        <item>Food</item>
+    </string-array>
+</resources>
