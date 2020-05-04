@@ -36,7 +36,7 @@ class HostSettings:AppCompatActivity() {
 
 
         accept.setOnClickListener {
-            OnlineGameInfo.onlineGame.rounds=rounds
+            OnlineGameInfo.onlineGame.rounds=rounds.toString()
             startActivity(Intent(this, EnterNickname::class.java))
         }
     }

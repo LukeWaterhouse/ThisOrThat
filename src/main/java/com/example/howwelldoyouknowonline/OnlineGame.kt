@@ -2,9 +2,8 @@ package com.example.howwelldoyouknowonline
 
 class OnlineGame() {
 
-    var Pin:Int = 0
-    var pushKey: String = ""
-    var rounds:Int = 0
+    var Pin:String = "0"
+    var rounds:String = "1"
     var players:MutableMap<String,Player> = HashMap()
 
 
@@ -12,8 +11,10 @@ class OnlineGame() {
 
 
     fun reset(){
-        Pin = 0
-        pushKey = ""
+        Pin = ""
+        val empty: MutableMap<String,Player> = HashMap()
+        players = empty
+        rounds = "1"
     }
 
 
