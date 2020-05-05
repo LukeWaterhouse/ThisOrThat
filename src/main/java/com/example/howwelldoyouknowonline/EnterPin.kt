@@ -20,9 +20,6 @@ class EnterPin:AppCompatActivity() {
         acceptpin.setOnClickListener {
 
             OnlineGameInfo.onlineGame.Pin = enterpin.text.toString()
-            Tools.pullGame()
-
-            Tools.pushPlayer()
             startActivity(Intent(this, HostGame::class.java))
         }
     }

@@ -13,6 +13,10 @@ class HostSettings:AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.host_settings)
+        val Tools:FirebaseTools = FirebaseTools()
+        OnlineGameInfo.onlineGame.rounds = "111"
+
+
 
         var rounds: Int = 1
         roundNo.text = rounds.toString()

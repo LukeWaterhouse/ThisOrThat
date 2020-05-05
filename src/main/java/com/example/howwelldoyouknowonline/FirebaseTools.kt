@@ -1,5 +1,6 @@
 package com.example.howwelldoyouknowonline
 
+import android.widget.Toast
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -24,8 +25,28 @@ class FirebaseTools {
                 TODO("Not yet implemented")
             }
             override fun onDataChange(p0: DataSnapshot) {
-                OnlineGameInfo.onlineGame.rounds = p0.child("rounds").toString()
-                OnlineGameInfo.onlineGame.Pin = p0.child("pin").toString()
+                OnlineGameInfo.onlineGame.rounds = p0.child("rounds").getValue(String::class.java).toString()
+
+                println("databefore"+OnlineGameInfo.onlineGame.Pin)
+                var thing =p0.child("pin").getValue(String::class.java)
+                OnlineGameInfo.onlineGame.Pin = p0.child("pin").getValue(String::class.java).toString()
+                println("dataafter"+OnlineGameInfo.onlineGame.Pin)
+                println("HERHERHER + ${OnlineGameInfo.onlineGame.Pin}")
+            }
+
+        })
+    }
+
+
+    fun pullPin(){
+        ref.child(OnlineGameInfo.onlineGame.Pin).child("pin").addValueEventListener(object :ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+               OnlineGameInfo.onlineGame.Pin = p0.getValue(String::class.java).toString()
+                println("PULLPIN "+OnlineGameInfo.onlineGame.Pin)
             }
 
         })
@@ -34,14 +55,16 @@ class FirebaseTools {
 
     //Updates the locally stored players
     fun updatePlayers(){
-        ref.child(OnlineGameInfo.onlineGame.Pin).addValueEventListener(object :ValueEventListener{
+        println("Before update")
+        println(OnlineGameInfo.onlineGame.Pin)
+        ref.child(OnlineGameInfo.onlineGame.Pin).child("players").addValueEventListener(object :ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
                 TODO("Not yet implemented")
             }
             override fun onDataChange(p0: DataSnapshot) {
 
                 var map: MutableMap<String, Player> = HashMap()
-                for (i in p0.child("players").children){
+                for (i in p0.children){
                     println(i)
                     var key = i.key.toString()
                     var value = i.getValue(Player::class.java)
@@ -53,6 +76,9 @@ class FirebaseTools {
                 OnlineGameInfo.onlineGame.players = map
             }
         })
+
+        println("AFTERUP")
+        println(OnlineGameInfo.onlineGame.Pin)
     }
 
 
@@ -65,7 +91,7 @@ class FirebaseTools {
 
     //Ensures Pin is unique and sets it locally
     fun checkPin(pin: Int): Int {
-        var Pin: Int = 0
+        var Pin: Int = 1
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
                 println("")
@@ -82,6 +108,20 @@ class FirebaseTools {
             }
         })
         return Pin
+
+    }
+
+    fun removeGame(){
+
+        ref.child(OnlineGameInfo.onlineGame.Pin).removeValue()
+    }
+
+
+
+    fun pushGame(){
+
+        ref.child(OnlineGameInfo.onlineGame.Pin).setValue(OnlineGameInfo.onlineGame)
+
 
     }
 }

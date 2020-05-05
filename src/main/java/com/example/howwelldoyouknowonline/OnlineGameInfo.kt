@@ -5,5 +5,5 @@ import com.example.howwelldoyouknowonline.OnlineGame
 object OnlineGameInfo {
 
 
-    var onlineGame: OnlineGame = OnlineGame()
+    var onlineGame: OnlineGame = OnlineGame("111","", HashMap())
 }

@@ -20,9 +20,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        PlayerInfo.player.reset()
+
 
         //Resets the online game stats
-        OnlineGameInfo.onlineGame.reset()
 
         //Starts offline mode
         startGame.setOnClickListener {

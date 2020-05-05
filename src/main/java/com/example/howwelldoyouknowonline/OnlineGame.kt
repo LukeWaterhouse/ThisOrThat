@@ -1,21 +1,6 @@
 package com.example.howwelldoyouknowonline
 
-class OnlineGame() {
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 
-    var Pin:String = "0"
-    var rounds:String = "1"
-    var players:MutableMap<String,Player> = HashMap()
-
-
-
-
-
-    fun reset(){
-        Pin = ""
-        val empty: MutableMap<String,Player> = HashMap()
-        players = empty
-        rounds = "1"
-    }
-
-
-}
+class OnlineGame(var Pin:String="", var rounds:String="",var players: MutableMap<String,Player> = HashMap())

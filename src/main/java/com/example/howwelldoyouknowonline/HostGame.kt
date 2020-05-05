@@ -4,9 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.renderscript.ScriptGroup
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.howwelldoyouknow.GameData
 import com.example.howwelldoyouknow.MainActivity
 import com.example.howwelldoyouknow.R
 import com.google.firebase.database.*
@@ -21,11 +23,25 @@ class HostGame:AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.host_game)
-        val mainHandler = Handler(Looper.getMainLooper())
+        val ref = FirebaseDatabase.getInstance().getReference("newGame")
+        val mainHandler = Handler()
+        println("START")
+
+        PlayerInfo.player.stats()
+
+        fun starterror() {
+            startActivity(Intent(this, Error::class.java))
+        }
+
+
         val Tools = FirebaseTools()
-        val colours: Array<String> = arrayOf("red", "green", "blue", "yellow", "orange", "purple", "silver", "pink", "lime")
+
+        val colours: Array<String> =
+            arrayOf("red", "green", "blue", "yellow", "orange", "purple", "silver", "pink", "lime")
         var counter = 0
 
 
@@ -34,12 +50,31 @@ class HostGame:AppCompatActivity() {
             var Pin = (1111111..9999999).random()
             Tools.checkPin(Pin)
             OnlineGameInfo.onlineGame.Pin = Pin.toString()
-            gamePin.text = Pin.toString()
-            val ref = FirebaseDatabase.getInstance().getReference("newGame")
-            ref.child(Pin.toString()).setValue(OnlineGameInfo.onlineGame).addOnCompleteListener {
-                Toast.makeText(applicationContext, "New Game Created!", Toast.LENGTH_LONG).show()
+            gamePin.text = OnlineGameInfo.onlineGame.Pin
+            ref.child(OnlineGameInfo.onlineGame.Pin).setValue(OnlineGameInfo.onlineGame)
+            println("AFTER SETUP")
+            PlayerInfo.player.stats()
+            println("PIN: ${OnlineGameInfo.onlineGame.Pin}")
+        }
+
+
+        ref.child(OnlineGameInfo.onlineGame.Pin).addValueEventListener(object : ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {
+                TODO("Not yet implemented")
             }
-            Tools.pushPlayer()
+
+            override fun onDataChange(p0: DataSnapshot) {
+                OnlineGameInfo.onlineGame = p0.getValue(OnlineGame::class.java)!!
+                println(OnlineGameInfo.onlineGame)
+                println("CHANGE")
+            }
+
+        })
+
+        if (!PlayerInfo.player.host){
+
+            ref.child(OnlineGameInfo.onlineGame.Pin).child("players").child(PlayerInfo.player.name).setValue(PlayerInfo.player)
+
         }
 
 
@@ -56,21 +91,28 @@ class HostGame:AppCompatActivity() {
         lime2.visibility = View.INVISIBLE
 
 
-        //Runs every 2 seconds, updates the players joining on the screen
-        mainHandler.post(object : Runnable {
+
+        var runnable = object :Runnable {
+
             override fun run() {
-                Tools.updatePlayers()
-                println(OnlineGameInfo.onlineGame.players.keys)
-                println("HERE")
-                println(OnlineGameInfo.onlineGame.rounds)
+                println("BEFOREPOSTDELAYED PIN:${OnlineGameInfo.onlineGame.Pin}")
+                mainHandler.postDelayed(this, 2000)
 
+                println("DURING")
+                println("PIN:${OnlineGameInfo.onlineGame.Pin}")
 
+                PlayerInfo.player.stats()
+                //Tools.updatePlayers()
 
+                if (!PlayerInfo.player.host) {
+                    gamePin.text = OnlineGameInfo.onlineGame.Pin
+                }
                 counter = 0
                 OnlineGameInfo.onlineGame.players.forEach {
 
                     println(it.key)
                     println(it.value)
+                    println("PIN:${OnlineGameInfo.onlineGame.Pin}")
 
                     var colour = colours[counter]
                     when (colour) {
@@ -90,69 +132,78 @@ class HostGame:AppCompatActivity() {
                             yellow2.visibility = View.VISIBLE
                             yellow2.text = it.key
                         }
-                        "orange" ->{
-                            orange2.visibility=View.VISIBLE
+                        "orange" -> {
+                            orange2.visibility = View.VISIBLE
                             orange2.text = it.key
                         }
-                        "purple"->{
+                        "purple" -> {
                             purple2.visibility = View.VISIBLE
                             purple2.text = it.key
                         }
-                        "silver"->{
+                        "silver" -> {
                             silver2.visibility = View.VISIBLE
                             silver2.text = it.key
                         }
-                        "pink"->{
+                        "pink" -> {
                             pink2.visibility = View.VISIBLE
-                            pink2.text=it.key
+                            pink2.text = it.key
                         }
-                        "lime"->{
-                            lime2.visibility=View.VISIBLE
+                        "lime" -> {
+                            lime2.visibility = View.VISIBLE
                             lime2.text = it.key
                         }
 
+
+
+
+
                     }
-                    counter+=1
+                    println("AFTERLOOP")
+                    println("PIN:${OnlineGameInfo.onlineGame.Pin}")
+
+                    counter += 1
 
 
                 }
-                mainHandler.postDelayed(this, 4000)
 
 
             }
-
-
-        })
-
-
-
-
-
-
-
-
-       //Sets arguments for cancel button
-        cancel.setOnClickListener {
-            var dGame = FirebaseDatabase.getInstance().getReference("newGame").child(OnlineGameInfo.onlineGame.Pin)
-            if (!PlayerInfo.player.host){
-
-                OnlineGameInfo.onlineGame.reset()
-                Tools.removePlayer()
-            }
-
-            if (PlayerInfo.player.host) {
-                OnlineGameInfo.onlineGame.reset()
-                dGame.removeValue()
-            }
-            Toast.makeText(applicationContext, "Deleted!", Toast.LENGTH_LONG).show()
-            startActivity(Intent(this, MainActivity::class.java))
         }
 
+        println("BEFORERUN PIN:${OnlineGameInfo.onlineGame.Pin}")
+
+        runnable.run()
+
+        println("AFTERRUN PIN:${OnlineGameInfo.onlineGame.Pin}")
 
 
 
+
+
+            //Sets arguments for cancel button
+            cancel.setOnClickListener {
+                mainHandler.removeCallbacks(runnable)
+                if (!PlayerInfo.player.host) {
+
+                    Tools.removePlayer()
+                }
+
+                if (PlayerInfo.player.host) {
+                    println("PINNO" + OnlineGameInfo.onlineGame.Pin)
+                    ref.child(OnlineGameInfo.onlineGame.Pin).setValue(null)
+                }
+                Toast.makeText(applicationContext, "Deleted!", Toast.LENGTH_LONG).show()
+                startActivity(Intent(this, MainActivity::class.java))
+            }
+
+        println("AFTERBUTTON PIN:${OnlineGameInfo.onlineGame.Pin}")
+
+
+
+
+
+        }
 
     }
 
-}
 
