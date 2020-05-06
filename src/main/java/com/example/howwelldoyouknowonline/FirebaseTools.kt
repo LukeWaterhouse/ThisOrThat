@@ -90,25 +90,22 @@ class FirebaseTools {
 
 
     //Ensures Pin is unique and sets it locally
-    fun checkPin(pin: Int): Int {
-        var Pin: Int = 1
+    fun checkPin(pin: Int) {
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
                 println("")
             }
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.hasChild("$pin")) {
-                    Pin = (1111111..9999999).random()
+                    var Pin = (1111111..9999999).random()
                     checkPin(Pin)
                 } else {
-                    OnlineGameInfo.onlineGame.Pin = Pin.toString()
+                    OnlineGameInfo.onlineGame.Pin = pin.toString()
                     println(OnlineGameInfo.onlineGame.Pin)
                     return
                 }
             }
         })
-        return Pin
-
     }
 
     fun removeGame(){

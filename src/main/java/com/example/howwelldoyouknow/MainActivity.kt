@@ -21,6 +21,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         PlayerInfo.player.reset()
+        OnlineGameInfo.onlineGame.Pin ="111"
+        OnlineGameInfo.onlineGame.rounds="1"
+        OnlineGameInfo.onlineGame.players.clear()
 
 
         //Resets the online game stats
