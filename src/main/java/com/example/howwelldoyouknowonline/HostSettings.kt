@@ -15,6 +15,8 @@ class HostSettings:AppCompatActivity() {
         setContentView(R.layout.host_settings)
         val Tools:FirebaseTools = FirebaseTools()
         OnlineGameInfo.onlineGame.rounds = "111"
+        OnlineGameInfo.onlineGame.options["Option1"] = "blank"
+        OnlineGameInfo.onlineGame.options["Option2"] = "blank"
 
 
 

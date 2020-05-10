@@ -16,22 +16,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Settings" />
-        <activity android:name=".ChooseColour" />
-        <activity android:name=".BeginGame" />
-        <activity android:name=".YourTurn1" />
-        <activity android:name=".Guess1" />
-        <activity android:name=".YourTurn2" />
-        <activity android:name=".YourTurn3" />
-        <activity android:name=".Guess2" />
-        <activity android:name=".Page" />
-        <activity android:name=".EndScreen" />
-        <activity android:name="com.example.howwelldoyouknowonline.HostGame" />
-        <activity android:name="com.example.howwelldoyouknowonline.HostSettings" />
-        <activity android:name="com.example.howwelldoyouknowonline.EnterNickname" />
-        <activity android:name="com.example.howwelldoyouknowonline.JoinGame" />
-        <activity android:name="com.example.howwelldoyouknowonline.EnterPin" />
-        <activity android:name="com.example.howwelldoyouknowonline.Error" />
+        <activity android:name=".Settings" android:screenOrientation="portrait"/>
+        <activity android:name=".ChooseColour" android:screenOrientation="portrait"/>
+        <activity android:name=".BeginGame" android:screenOrientation="portrait"/>
+        <activity android:name=".YourTurn1" android:screenOrientation="portrait"/>
+        <activity android:name=".Guess1" android:screenOrientation="portrait"/>
+        <activity android:name=".YourTurn2" android:screenOrientation="portrait"/>
+        <activity android:name=".YourTurn3" android:screenOrientation="portrait"/>
+        <activity android:name=".Guess2" android:screenOrientation="portrait"/>
+        <activity android:name=".Page" android:screenOrientation="portrait"/>
+        <activity android:name=".EndScreen" android:screenOrientation="portrait"/>
+        <activity android:name="com.example.howwelldoyouknowonline.HostGame" android:screenOrientation="portrait"/>
+        <activity android:name="com.example.howwelldoyouknowonline.HostSettings" android:screenOrientation="portrait"/>
+        <activity android:name="com.example.howwelldoyouknowonline.EnterNickname" android:screenOrientation="portrait"/>
+        <activity android:name="com.example.howwelldoyouknowonline.JoinGame" android:screenOrientation="portrait"/>
+        <activity android:name="com.example.howwelldoyouknowonline.EnterPin" android:screenOrientation="portrait"/>
+        <activity android:name="com.example.howwelldoyouknowonline.Error" android:screenOrientation="portrait"/>
+        <activity android:name="com.example.howwelldoyouknowonline.OnlineTurn1" android:screenOrientation="portrait"/>
+        <activity android:name="com.example.howwelldoyouknowonline.OnlineTurn2" android:screenOrientation="portrait"/>
+        <activity android:name="com.example.howwelldoyouknowonline.OnlineGuess1" android:screenOrientation="portrait"/>
+        <activity android:name="com.example.howwelldoyouknowonline.OnlineGuess2" android:screenOrientation="portrait"/>
+        <activity android:name="com.example.howwelldoyouknowonline.OnlineGuess3" android:screenOrientation="portrait"/>
+        <activity android:name="com.example.howwelldoyouknowonline.OnlineTurn3" android:screenOrientation="portrait"/>
 
     </application>
 

@@ -1,6 +1,6 @@
 package com.example.howwelldoyouknowonline
 
-import android.content.Intent
+import android.content .Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -21,10 +21,30 @@ import kotlin.concurrent.schedule
 
 class HostGame:AppCompatActivity() {
 
+    val ref = FirebaseDatabase.getInstance().getReference("newGame")
+    lateinit var eventlistener:ValueEventListener
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.host_game)
+
+        GameData.questions.shuffle()
+
+        if(!PlayerInfo.player.host){
+            HostNext.visibility = View.GONE
+        }
+
+
+        fun turn(){
+            startActivity(Intent(this, OnlineTurn1::class.java))
+
+        }
+
+        fun guess(){
+
+            startActivity(Intent(this, OnlineGuess1::class.java))
+        }
 
         fun menu(){
             startActivity(Intent(this, MainActivity::class.java))
@@ -32,7 +52,7 @@ class HostGame:AppCompatActivity() {
         fun error(){
             startActivity(Intent(this, Error::class.java))
         }
-        val ref = FirebaseDatabase.getInstance().getReference("newGame")
+
 
         val Tools = FirebaseTools()
         val colours: Array<String> = arrayOf("red", "green", "blue", "yellow", "orange", "purple", "silver", "pink", "lime")
@@ -52,6 +72,8 @@ class HostGame:AppCompatActivity() {
 
         if (!PlayerInfo.player.host){
             ref.child(OnlineGameInfo.onlineGame.Pin).child("players/${PlayerInfo.player.name}").setValue(PlayerInfo.player)
+            var newNo:Int = (OnlineGameInfo.onlineGame.noPlayers).toInt() + 1
+            ref.child(OnlineGameInfo.onlineGame.Pin).child("noPlayers").setValue(newNo)
             gamePin.text = OnlineGameInfo.onlineGame.Pin
         }
 
@@ -68,13 +90,28 @@ class HostGame:AppCompatActivity() {
         lime2.visibility = View.INVISIBLE
 
 
-        ref.child(OnlineGameInfo.onlineGame.Pin).addValueEventListener(object : ValueEventListener {
+        eventlistener = ref.child(OnlineGameInfo.onlineGame.Pin).addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
                 error()
 
             }
 
             override fun onDataChange(p0: DataSnapshot) {
+                OnlineGameInfo.onlineGame = p0.getValue(OnlineGame::class.java)!!
+                println(OnlineGameInfo.onlineGame.players[PlayerInfo.player.name]?.Turn)
+                PlayerInfo.player = OnlineGameInfo.onlineGame.players[PlayerInfo.player.name]!!
+
+
+                println("MyTurn "+PlayerInfo.player.Turn)
+                println("CurrentTurn"+OnlineGameInfo.onlineGame.currentTurn)
+                if(!PlayerInfo.player.host && OnlineGameInfo.onlineGame.gameState=="turnOne"){
+                    if (PlayerInfo.player.Turn==OnlineGameInfo.onlineGame.currentTurn){
+                        turn()
+                    }
+                    if (PlayerInfo.player.Turn!=OnlineGameInfo.onlineGame.currentTurn){
+                        guess()
+                    }
+                }
 
                 if (!p0.exists()) {
 
@@ -92,8 +129,8 @@ class HostGame:AppCompatActivity() {
                 } else {
 
 
-                    println("Before update" + OnlineGameInfo.onlineGame.Pin)
-                    OnlineGameInfo.onlineGame = p0.getValue(OnlineGame::class.java)!!
+
+
                     println("AFter update" + OnlineGameInfo.onlineGame.Pin)
                     if (OnlineGameInfo.onlineGame.Pin == "111") {
                         error()
@@ -165,11 +202,6 @@ class HostGame:AppCompatActivity() {
         })
 
         cancel.setOnClickListener {
-
-
-
-            println("HOST?"+ PlayerInfo.player.host)
-
             if (PlayerInfo.player.host){
                 println("In cancel"+ OnlineGameInfo.onlineGame.Pin)
                 ref.child(OnlineGameInfo.onlineGame.Pin).removeValue()
@@ -177,17 +209,58 @@ class HostGame:AppCompatActivity() {
 
             if(!PlayerInfo.player.host){
                 ref.child(OnlineGameInfo.onlineGame.Pin).child("players").child(PlayerInfo.player.name).removeValue()
+                var newNo:Int = (OnlineGameInfo.onlineGame.noPlayers).toInt() -1
+                var newStr:String = newNo.toString()
+                ref.child(OnlineGameInfo.onlineGame.Pin).child("noPlayers").setValue(newStr)
             }
 
+
+
+            ref.child(OnlineGameInfo.onlineGame.Pin).removeEventListener(eventlistener)
             startActivity(Intent(this, MainActivity::class.java))
         }
 
+
+        fun next(){
+            ref.child(OnlineGameInfo.onlineGame.Pin).removeEventListener(eventlistener)
+
+            if(OnlineGameInfo.onlineGame.players[PlayerInfo.player.name]?.Turn  == OnlineGameInfo.onlineGame.currentTurn){
+                startActivity(Intent(this, OnlineTurn1::class.java))
+            }
+            else{
+                //start guess1
+            }
+
+        }
+
         HostNext.setOnClickListener {
-            OnlineGameInfo.onlineGame.noPlayers = OnlineGameInfo.onlineGame.players.size.toString()
+
+            var counter = 1
+            for(i in OnlineGameInfo.onlineGame.players){
+                i.value.Turn=counter
+                counter+=1
+            }
+            ref.child(OnlineGameInfo.onlineGame.Pin).setValue(OnlineGameInfo.onlineGame)
+            ref.child(OnlineGameInfo.onlineGame.Pin).child("gameState").setValue("turnOne")
+            ref.child(OnlineGameInfo.onlineGame.Pin).child("noPlayers").setValue(OnlineGameInfo.onlineGame.players.size)
+            if (OnlineGameInfo.onlineGame.currentTurn==PlayerInfo.player.Turn){
+                startActivity(Intent(this, OnlineTurn1::class.java))
+            }
+
+            if (OnlineGameInfo.onlineGame.currentTurn!=PlayerInfo.player.Turn){
+                startActivity(Intent(this, OnlineGuess1::class.java))
+            }
         }
 
 
     }
+
+    override fun onPause() {
+        super.onPause()
+        ref.child(OnlineGameInfo.onlineGame.Pin).removeEventListener(eventlistener)
+
+    }
+
 }
 
 
