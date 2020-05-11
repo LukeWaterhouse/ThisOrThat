@@ -14,25 +14,28 @@ class OnlineTurn3:AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.online_turnthree)
+        var scoreText = "score: "+ (PlayerInfo.player.score).toString()
+        score10.text = scoreText
 
         nextYourTurn4.setOnClickListener {
 
+            ref.child(OnlineGameInfo.onlineGame.Pin).child("peopleGuessed").setValue(0)
+
             if (OnlineGameInfo.onlineGame.currentTurn==OnlineGameInfo.onlineGame.noPlayers){
+                ref.child(OnlineGameInfo.onlineGame.Pin).child("gameState").setValue("Round")
                 var rounds:Int = OnlineGameInfo.onlineGame.currentRound +1
                 ref.child(OnlineGameInfo.onlineGame.Pin).child("currentRound").setValue(rounds)
                 ref.child(OnlineGameInfo.onlineGame.Pin).child("currentTurn").setValue(1)
+                startActivity(Intent(this, OnlineRound::class.java))
 
             }
             else{
+                ref.child(OnlineGameInfo.onlineGame.Pin).child("gameState").setValue("Next")
                 var turn:Int = OnlineGameInfo.onlineGame.currentTurn + 1
                 ref.child(OnlineGameInfo.onlineGame.Pin).child("currentTurn").setValue(turn)
+                startActivity(Intent(this, OnlineGuess1::class.java))
 
             }
-            ref.child(OnlineGameInfo.onlineGame.Pin).child("gameState").setValue("Next")
-            ref.child(OnlineGameInfo.onlineGame.Pin).child("peopleGuessed").setValue(0)
-
-            startActivity(Intent(this, OnlineGuess1::class.java))
-
         }
     }
 

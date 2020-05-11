@@ -1,50 +1,32 @@
 package com.example.howwelldoyouknowonline
 
 import android.content.Intent
-import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.PersistableBundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.howwelldoyouknow.R
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import kotlinx.android.synthetic.main.end_round.*
 import kotlinx.android.synthetic.main.online_guess3.*
+import kotlinx.android.synthetic.main.online_turnone.*
 
+class OnlineRound:AppCompatActivity() {
 
-class OnlineGuess3:AppCompatActivity() {
     val ref = FirebaseDatabase.getInstance().getReference("newGame")
     lateinit var eventListener: ValueEventListener
-    var mediaPlayer:MediaPlayer = MediaPlayer();
-
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.online_guess3)
-        PlayerInfo.player.currentGuess = OnlineGameInfo.onlineGame.players[PlayerInfo.player.name]?.currentGuess.toString()
-        var player = OnlineGameInfo.onlineGame.currentPlayer + " Chose"
-        guesswas.text = player
-        var chosen = OnlineGameInfo.onlineGame.correctOption
-        chose.text = chosen
+        setContentView(R.layout.end_round)
 
-        if (PlayerInfo.player.currentGuess==OnlineGameInfo.onlineGame.correctOption){
-            var points = "Correct! You got a point"
 
-            mediaPlayer = MediaPlayer.create(this, R.raw.correct)
+        var scoreText = "CURRENT SCORE: "+ (PlayerInfo.player.score).toString()
+        score12.text = scoreText
 
-            mediaPlayer.start()
-            point.text = points
-            var newpoints:Int = PlayerInfo.player.score +1
-            ref.child(OnlineGameInfo.onlineGame.Pin).child("players").child(PlayerInfo.player.name).child("score").setValue(newpoints)
-        }
-        if (PlayerInfo.player.currentGuess!=OnlineGameInfo.onlineGame.correctOption){
-            var non = "Incorrect!"
-            mediaPlayer = MediaPlayer.create(this, R.raw.incorrect)
-            mediaPlayer.start()
-            point.text= non
-        }
         fun turn(){
             startActivity(Intent(this, OnlineTurn1::class.java))
         }
@@ -56,23 +38,24 @@ class OnlineGuess3:AppCompatActivity() {
             startActivity(Intent(this, OnlineRound::class.java))
         }
 
+
         eventListener = ref.child(OnlineGameInfo.onlineGame.Pin).addValueEventListener(object :
             ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
             }
             override fun onDataChange(p0: DataSnapshot) {
                 OnlineGameInfo.onlineGame = p0.getValue(OnlineGame::class.java)!!
+                var roundstxt = "Round: "+OnlineGameInfo.onlineGame.currentRound
+                rounds2.text = roundstxt
                 var newscore:Long = p0.child("players").child(PlayerInfo.player.name).child("score").value as Long
                 var newscoreInt:Int = newscore.toInt()
                 PlayerInfo.player.score = newscoreInt
-                var scoreText = "score: "+ (PlayerInfo.player.score).toString()
-                score11.text = scoreText
+                var playerTurn: Long = p0.child("players").child(PlayerInfo.player.name).child("turn").value as Long
+                var newplayerTurn = playerTurn.toInt()
+                PlayerInfo.player.Turn = newplayerTurn
                 PlayerInfo.player.currentGuess = OnlineGameInfo.onlineGame.players[PlayerInfo.player.name]?.currentGuess.toString()
 
-                if (OnlineGameInfo.onlineGame.currentTurn==1&& OnlineGameInfo.onlineGame.gameState=="Round"){
-                    round()
 
-                }
                 if (OnlineGameInfo.onlineGame.currentTurn==PlayerInfo.player.Turn&& OnlineGameInfo.onlineGame.gameState=="Next"){
                     turn()
                 }
@@ -83,6 +66,20 @@ class OnlineGuess3:AppCompatActivity() {
 
             }
         })
+
+        hostbegin.visibility = View.INVISIBLE
+
+        if(PlayerInfo.player.host){
+            hostbegin.visibility=View.VISIBLE
+        }
+
+        hostbegin.setOnClickListener {
+            if(hostbegin.visibility==View.VISIBLE){
+                ref.child(OnlineGameInfo.onlineGame.Pin).child("gameState").setValue("Next")
+            }
+
+        }
+
     }
 
     override fun onPause() {

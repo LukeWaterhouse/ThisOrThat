@@ -20,6 +20,8 @@ class OnlineGuess1:AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.online_guess1)
+        var scoreText = "score: "+ (PlayerInfo.player.score).toString()
+        score6.text = scoreText
         nextYourTurn2.visibility = View.GONE
         var myChoice:String = ""
         println(OnlineGameInfo.onlineGame.currentPlayer)

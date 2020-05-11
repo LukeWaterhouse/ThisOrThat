@@ -3,6 +3,7 @@ package com.example.howwelldoyouknowonline
 import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.howwelldoyouknow.R
 import kotlinx.android.synthetic.main.nickname.*
@@ -15,19 +16,27 @@ class EnterNickname: AppCompatActivity() {
 
         //Accept nickname and proceed
         accept2.setOnClickListener {
+            if (name.text.toString()==""){
+                val text = "Please Enter a nickname!"
+                val duration = Toast.LENGTH_SHORT
+                val toast = Toast.makeText(applicationContext, text, duration)
+                toast.show()
+            }
 
+            else{
+                PlayerInfo.player.name = name.text.toString()
+                OnlineGameInfo.onlineGame.players[PlayerInfo.player.name] = PlayerInfo.player
+                println("${PlayerInfo.player.host}")
 
-            PlayerInfo.player.name = name.text.toString()
-            OnlineGameInfo.onlineGame.players[PlayerInfo.player.name] = PlayerInfo.player
-            println("${PlayerInfo.player.host}")
+                //If player is not the host go to enter pin number
+                if (!PlayerInfo.player.host) {
+                    startActivity(Intent(this, EnterPin::class.java))
 
-            //If player is not the host go to enter pin number
-            if (!PlayerInfo.player.host) {
-                startActivity(Intent(this, EnterPin::class.java))
+                }
+                //If not host goes to HostGame
+                else(startActivity(Intent(this,HostGame::class.java)))
 
             }
-            //If not host goes to HostGame
-            else(startActivity(Intent(this,HostGame::class.java)))
         }
     }
 }

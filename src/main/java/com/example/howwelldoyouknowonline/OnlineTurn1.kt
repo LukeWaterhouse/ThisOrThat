@@ -24,24 +24,31 @@ class OnlineTurn1: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.online_turnone)
+
+        //Sets the score to the current score in top right
+        var scoreText = "score: "+ (PlayerInfo.player.score).toString()
+        score8.text = scoreText
+
+        //Initially sets the next button to invisible till chosen an option
         nextYourTurn.visibility = View.GONE
 
+        //Sets Turn one player to the current player in database
         ref.child(OnlineGameInfo.onlineGame.Pin).child("currentPlayer").setValue(PlayerInfo.player.name)
 
+
+
+        //Sorts out the options choices and pushes them to database
         var choice:String = ""
-
-
         var tab:Int = (OnlineGameInfo.onlineGame.currentRound-1) * OnlineGameInfo.onlineGame.players.size
         var option1:String = GameData.questions[tab+OnlineGameInfo.onlineGame.currentTurn][0]
         var option2:String = GameData.questions[tab+OnlineGameInfo.onlineGame.currentTurn][1]
-
         optionOne.text = option1
         optionTwo.text = option2
-
         ref.child(OnlineGameInfo.onlineGame.Pin).child("options").child("Option1").setValue(option1)
         ref.child(OnlineGameInfo.onlineGame.Pin).child("options").child("Option2").setValue(option2)
 
 
+        //Sets Option one as the choice
         optionOne.setOnClickListener {
             choice = optionOne.text.toString()
             optionOne.setBackgroundResource(R.drawable.start_button_selected)
@@ -49,6 +56,8 @@ class OnlineTurn1: AppCompatActivity() {
             nextYourTurn.visibility = View.VISIBLE
         }
 
+
+        //Sets Option two as the choice
         optionTwo.setOnClickListener {
             choice = optionTwo.text.toString()
             optionTwo.setBackgroundResource(R.drawable.start_button_selected)
@@ -57,23 +66,24 @@ class OnlineTurn1: AppCompatActivity() {
 
         }
 
+
+
+        //Listens for database changes
         eventListener = ref.child(OnlineGameInfo.onlineGame.Pin).addValueEventListener(object :
             ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
-
             }
 
             override fun onDataChange(p0: DataSnapshot) {
-
+                //Pulls the online game
                 OnlineGameInfo.onlineGame = p0.getValue(OnlineGame::class.java)!!
-
-
             }
         })
 
 
-        nextYourTurn.setOnClickListener {
 
+        //On next pushes the correct option and guessed to "yes"
+        nextYourTurn.setOnClickListener {
             ref.child(OnlineGameInfo.onlineGame.Pin).child("correctOption").setValue(choice)
             ref.child(OnlineGameInfo.onlineGame.Pin).child("guessed").setValue("yes")
             startActivity(Intent(this, OnlineTurn2::class.java))

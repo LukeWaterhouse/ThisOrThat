@@ -19,6 +19,8 @@ class OnlineGuess2:AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.online_guess2)
+        var scoreText = "score: "+ (PlayerInfo.player.score).toString()
+        score7.text = scoreText
 
         fun reveal(){
             startActivity(Intent(this, OnlineGuess3::class.java))
