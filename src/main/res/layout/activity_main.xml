@@ -4,40 +4,66 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#3F51B5"
+    android:background="@drawable/blue_radial"
     tools:context=".MainActivity">
 
     <Button
         android:id="@+id/Join"
-        android:layout_width="122dp"
-        android:layout_height="54dp"
+        android:layout_width="194dp"
+        android:layout_height="70dp"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/start_button"
         android:text="join game"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/startGame2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/Host"
-        android:layout_width="122dp"
-        android:layout_height="54dp"
-        android:layout_marginBottom="28dp"
+        android:layout_width="194dp"
+        android:layout_height="70dp"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/start_button"
         android:text="Host Game"
+        android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/Join"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/startGame"
-        android:layout_width="122dp"
-        android:layout_height="54dp"
-        android:layout_marginTop="28dp"
+        android:id="@+id/exit"
+        android:layout_width="194dp"
+        android:layout_height="70dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/start_button"
+        android:text="exit game"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/startGame2"
+        android:layout_width="194dp"
+        android:layout_height="70dp"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/start_button"
         android:text="offline mode"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/exit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="373dp"
+        android:layout_height="229dp"
+        app:layout_constraintBottom_toTopOf="@+id/Host"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Join" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.575"
+        app:srcCompat="@mipmap/title" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

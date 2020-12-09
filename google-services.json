@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:360057969872:android:a8e76c9e81b91e351f92d5",
         "android_client_info": {
-          "package_name": "com.example.howwelldoyouknow"
+          "package_name": "com.thisorthat.howwelldoyouknow"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "360057969872-pu083bpu6tpbtqjdaq11pdkuiu4tm7d7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.howwelldoyouknow",
+            "package_name": "com.thisorthat.howwelldoyouknow",
             "certificate_hash": "db6412161ec89c0afe77ae2f65f241f032026cfe"
           }
         },

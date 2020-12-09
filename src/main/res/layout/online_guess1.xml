@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#3F51B5">
+    android:background="@drawable/blue_radial">
 
     <TextView
         android:id="@+id/score6"
@@ -37,7 +37,7 @@
         android:layout_width="121dp"
         android:layout_height="69dp"
         android:background="@drawable/start_button"
-        android:text="Button"
+        android:text="Cottage"
         android:textColor="#000000"
         app:layout_constraintBottom_toTopOf="@+id/textView24"
         app:layout_constraintEnd_toEndOf="parent"
@@ -76,7 +76,7 @@
         android:layout_width="121dp"
         android:layout_height="69dp"
         android:background="@drawable/start_button"
-        android:text="Button"
+        android:text="Mansion"
         app:layout_constraintBottom_toTopOf="@+id/textView22"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
